@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http.Extensions;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Sample1.Data;
 using Sample1.Extensions;
@@ -40,7 +41,7 @@ namespace Sample1.Controllers
         {
             var category = await context.Categories.FirstAsync(c => c.Id == id);
 
-            var time = category.Created.GetDateTimeByUserTz();
+            //var time = category.Created.GetDateTimeByUserTz();
 
             category.Created = category.Created.GetDateTimeByUserTz();
 
@@ -75,6 +76,8 @@ namespace Sample1.Controllers
         public async Task<IActionResult> Demo4Async(Category category)
         {
             context.Add(category);
+
+            category.Created = category.Created.GetUtcDateTimeFromUserTz();
 
             await context.SaveChangesAsync();
 
